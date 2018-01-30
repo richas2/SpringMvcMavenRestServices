@@ -24,7 +24,7 @@ public class EmployeeDaoImplTest {
     public static void setUp() {
         mockedEmpDao = mock(EmployeeDao.class);
         emp1 = new Employee(111, "Rahul", "Sharma", 88);
-        emp2 = new Employee(2, "Vikas", "Gupta", 98);
+        emp2 = new Employee(2, "Vikas", "Gupta", 55);
 
         when(mockedEmpDao.getEmployees()).thenReturn(Arrays.asList(emp1, emp2));
         when(mockedEmpDao.getEmployee(111)).thenReturn(emp1);

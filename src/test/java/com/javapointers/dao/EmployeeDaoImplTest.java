@@ -28,7 +28,7 @@ public class EmployeeDaoImplTest {
 
         when(mockedEmpDao.getEmployees()).thenReturn(Arrays.asList(emp1, emp2));
         when(mockedEmpDao.getEmployee(111)).thenReturn(emp1);
-        when(mockedEmpDao.createEmployee(emp1)).thenReturn(emp1.getEmployeeId());
+        when(mockedEmpDao.createEmployee(emp1)).thenReturn(emp2.getEmployeeId());
         when(mockedEmpDao.updateEmployee(emp1)).thenReturn(emp1.getEmployeeId());
         when(mockedEmpDao.deleteEmployee(111)).thenReturn(emp1.getEmployeeId());
     }

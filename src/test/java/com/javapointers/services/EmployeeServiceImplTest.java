@@ -4,15 +4,12 @@ import com.javapointers.bean.Employee;
 import com.javapointers.dao.EmployeeDao;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
-import java.util.Arrays;
-
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
-
 import org.mockito.Mock;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;

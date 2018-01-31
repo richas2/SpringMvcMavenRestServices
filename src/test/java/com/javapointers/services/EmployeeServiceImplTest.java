@@ -1,80 +1,88 @@
 package com.javapointers.services;
 
 import com.javapointers.bean.Employee;
-import com.javapointers.services.EmployeeService;
+import com.javapointers.dao.EmployeeDao;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
+import org.mockito.Mock;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 public class EmployeeServiceImplTest {
 
-    private static EmployeeService mockedEmpService;
+    @Mock
+    private static EmployeeDao mockedDao;
+
+    private static EmployeeServiceImpl service;
+
     private static Employee emp1;
     private static Employee emp2;
 
+    @Before
+    public void setUp() throws Exception {
+        initMocks(this);
+        service = new EmployeeServiceImpl(mockedDao);
 
-    @BeforeClass
-    public static void  setUp() {
-        mockedEmpService = mock(EmployeeService.class);
         emp1 = new Employee(1, "Rahul", "Sharma", 88);
         emp2 = new Employee(2, "Vikas", "Gupta", 98);
 
-        when(mockedEmpService.getEmployees()).thenReturn(Arrays.asList(emp1, emp2));
-        when(mockedEmpService.getEmployee(1)).thenReturn(emp1);
-        when(mockedEmpService.createEmployee(emp1)).thenReturn(emp1.getEmployeeId());
-        when(mockedEmpService.updateEmployee(emp1)).thenReturn(emp1.getEmployeeId());
-        when(mockedEmpService.deleteEmployee(1)).thenReturn(emp1.getEmployeeId());
     }
 
     @Test
-    public void testGetEmployees() {
-        List<Employee> allEmployees = mockedEmpService.getEmployees();
-        assertEquals(2, allEmployees.size());
-        Employee myEmployee = allEmployees.get(0);
-        assertEquals("Rahul", myEmployee.getFirstName());
-        assertEquals("Sharma", myEmployee.getLastName());
-        assertEquals(1, myEmployee.getEmployeeId());
-        assertEquals(88, myEmployee.getAge());
+    public void should_delete_employee() {
+        when(mockedDao.deleteEmployee(1)).thenReturn(emp1.getEmployeeId());
 
+        service.deleteEmployee(1);
+
+        verify(mockedDao).deleteEmployee(1);
     }
 
     @Test
-    public void testGetEmployee() {
+    public void should_get_all_employees() {
+        when(mockedDao.getEmployees()).thenReturn(Arrays.asList(emp1, emp2));
 
-        int employeeId=1;
+        List<Employee> output = service.getEmployees();
 
-        Employee myEmployee = mockedEmpService.getEmployee(1);
-
-        assertNotNull(myEmployee);
-        assertEquals(employeeId, myEmployee.getEmployeeId());
-
+        assertEquals(2, output.size());
     }
 
     @Test
-    public void testDeleteEmployee() {
-        int employeeId = mockedEmpService.deleteEmployee(1);
-        assertNotNull(employeeId);
-        assertEquals(emp1.getEmployeeId(), employeeId);
+    public void should_get_selected_employee() {
+        when(mockedDao.getEmployee(1)).thenReturn(emp1);
+
+        Employee myEmployee = mockedDao.getEmployee(1);
+        Employee output = service.getEmployee(1);
+
+        assertEquals(myEmployee, output);
+    }
+
+
+    @Test
+    public void should_update_employee() {
+        when(mockedDao.updateEmployee(emp1)).thenReturn(emp1.getEmployeeId());
+
+        int employeeId = mockedDao.updateEmployee(emp1);
+        int output = service.updateEmployee(emp1);
+
+        assertEquals(output, employeeId);
     }
 
     @Test
-    public void testUpdateEmployee() {
-        int employeeId = mockedEmpService.updateEmployee(emp1);
-        assertNotNull(employeeId);
-        assertEquals(emp1.getEmployeeId(), employeeId);
-    }
+    public void should_create_employee() {
+        when(mockedDao.createEmployee(emp1)).thenReturn(emp1.getEmployeeId());
 
-    @Test
-    public void testCreateEmployee() {
-        int employeeId = mockedEmpService.createEmployee(emp1);
-        assertNotNull(employeeId);
-        assertEquals(emp1.getEmployeeId(), employeeId);
+        int output = mockedDao.createEmployee(emp1);
+        int employeeId = service.createEmployee(emp1);
+
+        assertEquals(output, employeeId);
     }
 }

@@ -10,8 +10,14 @@ import com.javapointers.dao.EmployeeDao;
 
 @Service("employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
-    @Autowired
+
     private EmployeeDao employeeDao;
+
+    @Autowired
+    EmployeeServiceImpl(EmployeeDao employeeDao) {
+        this.employeeDao=employeeDao;
+    }
+
 
     public List<Employee> getEmployees() {
         List<Employee> employees = employeeDao.getEmployees();

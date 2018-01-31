@@ -1,83 +1,77 @@
 package com.javapointers.dao;
 
 import com.javapointers.bean.Employee;
-import com.javapointers.services.EmployeeService;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 public class EmployeeDaoImplTest {
 
-    private static EmployeeDao mockedEmpDao;
+    EmployeeDaoImpl dao;
+
     private static Employee emp1;
     private static Employee emp2;
 
+    @Mock
+    private ArrayList<Employee> mockEmployeesList;
 
-    @BeforeClass
-    public static void setUp() {
-        mockedEmpDao = mock(EmployeeDao.class);
-        emp1 = new Employee(111, "Rahul", "Sharma", 88);
-        emp2 = new Employee(2, "Vikas", "Gupta", 55);
+    @Before
+    public void setUp() throws Exception {
 
-        when(mockedEmpDao.getEmployees()).thenReturn(Arrays.asList(emp1, emp2));
-        when(mockedEmpDao.getEmployee(111)).thenReturn(emp1);
-        when(mockedEmpDao.createEmployee(emp1)).thenReturn(emp1.getEmployeeId());
-        when(mockedEmpDao.updateEmployee(emp1)).thenReturn(emp1.getEmployeeId());
-        when(mockedEmpDao.deleteEmployee(111)).thenReturn(emp1.getEmployeeId());
+        MockitoAnnotations.initMocks(this);
+
+        dao = new EmployeeDaoImpl(mockEmployeesList);
+        emp1 = new Employee(1, "Rahul", "Sharma", 88);
+        emp2 = new Employee(2, "Vikas", "Gupta", 98);
+
+        doReturn(true).when(mockEmployeesList).remove(emp1);
+        when(mockEmployeesList.get(0)).thenReturn(emp1);
+        when(mockEmployeesList.size()).thenReturn(2);
+        doReturn(true).when(mockEmployeesList).add(emp1);
     }
 
     @Test
-    public void testGetEmployees() {
-        List<Employee> allEmployees = mockedEmpDao.getEmployees();
-        Employee myEmployee = allEmployees.get(0);
-        assertEmployeeData(allEmployees, myEmployee);
+    public void should_get_selected_employee() {
 
-    }
+        Employee myEmployee = mockEmployeesList.get(0);
+        Employee output = dao.getEmployee(1);
 
-    @Test
-    public void testGetEmployee() {
-
-        int employeeId = 111;
-        Employee myEmployee = mockedEmpDao.getEmployee(111);
-        assertNotNull(myEmployee);
-        assertEquals(employeeId, myEmployee.getEmployeeId());
+        assertEquals(myEmployee.getFirstName(), output.getFirstName());
 
     }
 
     @Test
-    public void testDeleteEmployee() {
-        int employeeId = mockedEmpDao.deleteEmployee(111);
-        assertNotNull(employeeId);
-        assertEquals(emp1.getEmployeeId(), employeeId);
+    public void should_get_all_employees() {
+        ArrayList<Employee> output = (ArrayList<Employee>) dao.getEmployees();
+
+        assertEquals(mockEmployeesList, output);
     }
 
     @Test
-    public void testUpdateEmployee() {
-        int employeeId = mockedEmpDao.updateEmployee(emp1);
-        assertNotNull(employeeId);
-        assertEquals(emp1.getEmployeeId(), employeeId);
+    public void should_create_employee() {
+        int output = dao.createEmployee(emp1);
+
+        assertEquals(emp1.getEmployeeId(), output);
     }
 
     @Test
-    public void testCreateEmployee() {
-        int employeeId = mockedEmpDao.createEmployee(emp1);
-        assertNotNull(employeeId);
-        assertEquals(emp1.getEmployeeId(), employeeId);
+    public void should_update_employee() {
+        int output = dao.updateEmployee(emp1);
+
+        assertEquals(emp1.getEmployeeId(), output);
     }
 
-    public void assertEmployeeData(List<Employee> allEmployees, Employee myEmployee) {
-        assertEquals(2, allEmployees.size());
-        assertEquals("Rahul", myEmployee.getFirstName());
-        assertEquals("Sharma", myEmployee.getLastName());
-        assertEquals(111, myEmployee.getEmployeeId());
-        assertEquals(88, myEmployee.getAge());
+    @Test
+    public void should_delete_employee() {
+        int output = dao.deleteEmployee(1);
 
+        assertEquals(emp1.getEmployeeId(), output);
     }
 }

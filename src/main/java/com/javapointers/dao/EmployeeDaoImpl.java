@@ -16,6 +16,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     List<Employee> employees =new ArrayList<>();
 
+    @Autowired
+    public EmployeeDaoImpl(List<Employee> employee) {
+        this.employees = employee;
+    }
 
     public List<Employee> getEmployees() {
 
@@ -53,6 +57,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             {
                 employees.remove(employeeLocal);
                 count=employeeLocal.getEmployeeId();
+                break;
             }
 
         }
@@ -71,6 +76,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employees.remove(employeeLocal);
                 employees.add(employee);
                 count=employee.getEmployeeId();
+                break;
             }
 
         }

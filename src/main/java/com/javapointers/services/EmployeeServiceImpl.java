@@ -1,12 +1,13 @@
 package com.javapointers.services;
 
-import java.util.List;
-
+import com.javapointers.bean.Employee;
+import com.javapointers.bean.EmployeeVO;
+import com.javapointers.dao.EmployeeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.javapointers.bean.Employee;
-import com.javapointers.dao.EmployeeDao;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
@@ -19,14 +20,30 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
-    public List<Employee> getEmployees() {
+    public List<EmployeeVO> getEmployees() {
         List<Employee> employees = employeeDao.getEmployees();
-        return employees;
+        List<EmployeeVO> employeesVOList=new ArrayList<EmployeeVO>();
+        EmployeeVO employeeVO=null;
+        Employee employee=null;
+        for(int i=0;i<employees.size();i++)
+        {
+            employee=employees.get(i);
+            employeeVO=new EmployeeVO();
+            employeeVO.setFirstName(employee.getFirstName());
+            employeeVO.setLastName(employee.getLastName());
+            employeeVO.setAge(employee.getAge());
+            employeesVOList.add(employeeVO);
+        }
+        return employeesVOList;
     }
 
-    public Employee getEmployee(int employeeId) {
+    public EmployeeVO getEmployee(int employeeId) {
         Employee employee = employeeDao.getEmployee(employeeId);
-        return employee;
+        EmployeeVO employeeVO=new EmployeeVO();
+        employeeVO.setFirstName(employee.getFirstName());
+        employeeVO.setLastName(employee.getLastName());
+        employeeVO.setAge(employee.getAge());
+        return employeeVO;
     }
 
     public int deleteEmployee(int employeeId) {

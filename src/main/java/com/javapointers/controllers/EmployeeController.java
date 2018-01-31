@@ -1,19 +1,15 @@
 package com.javapointers.controllers;
 
-import java.util.List;
-
+import com.javapointers.bean.Employee;
+import com.javapointers.bean.EmployeeVO;
+import com.javapointers.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.javapointers.bean.Employee;
-import com.javapointers.services.EmployeeService;
+import java.util.List;
 
 @RestController
 public class EmployeeController {
@@ -22,37 +18,37 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @RequestMapping(value = "/employee", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<Employee>> employees() {
+    public ResponseEntity<List<EmployeeVO>> employees() {
 
         HttpHeaders headers = new HttpHeaders();
-        List<Employee> employees = employeeService.getEmployees();
+        List<EmployeeVO> employees = employeeService.getEmployees();
 
         if (employees == null) {
-            return new ResponseEntity<List<Employee>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<List<EmployeeVO>>(HttpStatus.NOT_FOUND);
         }
         headers.add("Number Of Records Found", String.valueOf(employees.size()));
-        return new ResponseEntity<List<Employee>>(employees, headers, HttpStatus.OK);
+        return new ResponseEntity<List<EmployeeVO>>(employees, headers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Employee> getEmployee(@PathVariable("id") int employeeId) {
-        Employee employee = employeeService.getEmployee(employeeId);
+    public ResponseEntity<EmployeeVO> getEmployee(@PathVariable("id") int employeeId) {
+        EmployeeVO employee = employeeService.getEmployee(employeeId);
         if (employee == null) {
-            return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<EmployeeVO>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+        return new ResponseEntity<EmployeeVO>(employee, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/employee/delete/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Employee> deleteEmployee(@PathVariable("id") int employeeId) {
+    public ResponseEntity<EmployeeVO> deleteEmployee(@PathVariable("id") int employeeId) {
         HttpHeaders headers = new HttpHeaders();
-        Employee employee = employeeService.getEmployee(employeeId);
+        EmployeeVO employee = employeeService.getEmployee(employeeId);
         if (employee == null) {
-            return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<EmployeeVO>(HttpStatus.NOT_FOUND);
         }
         employeeService.deleteEmployee(employeeId);
         headers.add("Employee Deleted - ", String.valueOf(employeeId));
-        return new ResponseEntity<Employee>(employee, headers, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<EmployeeVO>(employee, headers, HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/employee", method = RequestMethod.POST, produces = "application/json")
@@ -69,7 +65,7 @@ public class EmployeeController {
     @RequestMapping(value = "/employee/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Employee> updateEmployee(@PathVariable("id") int employeeId, @RequestBody Employee employee) {
         HttpHeaders headers = new HttpHeaders();
-        Employee isExist = employeeService.getEmployee(employeeId);
+        EmployeeVO isExist = employeeService.getEmployee(employeeId);
         if (isExist == null) {
             return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
         } else if (employee == null) {

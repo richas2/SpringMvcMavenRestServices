@@ -1,6 +1,7 @@
 package com.javapointers.services;
 
 import com.javapointers.bean.Employee;
+import com.javapointers.bean.EmployeeVO;
 import com.javapointers.dao.EmployeeDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class EmployeeServiceImplTest {
     public void should_get_all_employees() {
         when(mockedDao.getEmployees()).thenReturn(Arrays.asList(emp1, emp2));
 
-        List<Employee> output = service.getEmployees();
+        List<EmployeeVO> output = service.getEmployees();
 
         assertEquals(2, output.size());
     }
@@ -57,9 +58,9 @@ public class EmployeeServiceImplTest {
         when(mockedDao.getEmployee(1)).thenReturn(emp1);
 
         Employee myEmployee = mockedDao.getEmployee(1);
-        Employee output = service.getEmployee(1);
+        EmployeeVO output = service.getEmployee(1);
 
-        assertEquals(myEmployee, output);
+        assertEquals(myEmployee.getFirstName(), output.getFirstName());
     }
 
 

@@ -14,8 +14,13 @@ import java.util.List;
 @RestController
 public class EmployeeController {
 
-    @Autowired
+
     private EmployeeService employeeService;
+
+    @Autowired
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService=employeeService;
+    }
 
     @RequestMapping(value = "/employee", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<EmployeeVO>> employees() {

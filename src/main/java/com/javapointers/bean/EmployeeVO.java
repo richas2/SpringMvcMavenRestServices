@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class EmployeeVO {
 
     @JsonCreator
-    public EmployeeVO( @JsonProperty("firstName") String firstName,
+    public EmployeeVO(@JsonProperty("employeeId") int employeeId,  @JsonProperty("firstName") String firstName,
                     @JsonProperty("lastName") String lastName, @JsonProperty("age") int age) {
-
+        this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
@@ -47,6 +47,7 @@ public class EmployeeVO {
     private String firstName;
     private String lastName;
     private int age;
+    private int employeeId;
 
     @Override
     public String toString() {

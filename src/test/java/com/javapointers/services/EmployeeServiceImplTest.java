@@ -24,6 +24,7 @@ public class EmployeeServiceImplTest {
 
     private static Employee emp1;
     private static Employee emp2;
+    private static EmployeeVO emp3;
 
     @Before
     public void setUp() throws Exception {
@@ -32,6 +33,7 @@ public class EmployeeServiceImplTest {
 
         emp1 = new Employee(1, "Rahul", "Sharma", 88);
         emp2 = new Employee(2, "Vikas", "Gupta", 98);
+        emp3 = new EmployeeVO(3,"Vikas", "Gupta", 98);
 
     }
 
